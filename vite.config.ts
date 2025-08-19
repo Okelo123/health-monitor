@@ -1,11 +1,15 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  base: Process.env.VITE_BASE_URL || '/',
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
-});
+export default defineConfig(({ mode }) => {
+  // Load env variables from .env files
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
+    plugins: [react()],
+    base: env.VITE_BASE_URL || '/',   // ✅ no "Process.env"
+    optimizeDeps: {
+      exclude: ['lucide-react'],
+    },
+  }
+})
